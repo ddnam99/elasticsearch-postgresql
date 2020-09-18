@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  postgresql:
+    image: postgres:10
+    environment:
+      POSTGRES_PASSWORD: Nmb123
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    ports:
+        - "9200:9200"
+        - "9300:9300"
+    environment:
+        - discovery.type=single-node
+    volumes:
+        - elasticsearch-data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.0
+    ports:
+        - "5601:5601"
+    depends_on:
+        - elasticsearch
+
+  logstash:
+    image: logstash
+    build: ./logstash
+    depends_on:
+        - postgresql
+        - elasticsearch
+
+volumes:
+  postgresql-data:
+    external: true
+  elasticsearch-data:
+   external: true
