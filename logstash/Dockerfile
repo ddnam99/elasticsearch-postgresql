@@ -1,5 +1,5 @@
 FROM docker.elastic.co/logstash/logstash:6.3.0
-
+LABEL author="Dương Đức Nam <nampt1999@gmail.com>"
 USER root
 
 RUN /usr/share/logstash/bin/logstash-plugin install logstash-input-jdbc
