@@ -4,7 +4,7 @@ services:
   postgresql:
     image: postgres:10
     environment:
-      POSTGRES_PASSWORD: Nmb123
+      POSTGRES_PASSWORD: ***
     ports:
       - 5432:5432
     volumes:
@@ -13,17 +13,18 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
     ports:
-        - "9200:9200"
-        - "9300:9300"
+        - 9200:9200
+        - 9300:9300
     environment:
         - discovery.type=single-node
+        - cluster.name=docker-cluster
     volumes:
         - elasticsearch-data:/usr/share/elasticsearch/data
 
   kibana:
     image: docker.elastic.co/kibana/kibana:6.3.0
     ports:
-        - "5601:5601"
+        - 5601:5601
     depends_on:
         - elasticsearch
 
@@ -38,4 +39,4 @@ volumes:
   postgresql-data:
     external: true
   elasticsearch-data:
-   external: true
+    external: true
