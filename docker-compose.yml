@@ -3,6 +3,7 @@ version: '3.4'
 services:
   postgresql:
     image: postgres:10
+    restart: always
     environment:
       POSTGRES_PASSWORD: ***
     ports:
@@ -12,17 +13,19 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
-    ports:
-        - 9200:9200
-        - 9300:9300
+    restart: always
     environment:
         - discovery.type=single-node
         - cluster.name=docker-cluster
+    ports:
+        - 9200:9200
+        - 9300:9300
     volumes:
         - elasticsearch-data:/usr/share/elasticsearch/data
 
   kibana:
     image: docker.elastic.co/kibana/kibana:6.3.0
+    restart: always
     ports:
         - 5601:5601
     depends_on:
@@ -30,6 +33,7 @@ services:
 
   logstash:
     image: logstash
+    restart: always
     build: ./logstash
     depends_on:
         - postgresql
