@@ -5,7 +5,7 @@ services:
     image: postgres:10
     restart: always
     environment:
-      POSTGRES_PASSWORD: ***
+      POSTGRES_PASSWORD: changeme
     ports:
       - 5432:5432
     volumes:
@@ -18,25 +18,25 @@ services:
         - discovery.type=single-node
         - cluster.name=docker-cluster
     ports:
-        - 9200:9200
-        - 9300:9300
+        - 9200
+        - 9300
     volumes:
         - elasticsearch-data:/usr/share/elasticsearch/data
-
+  logstash:
+    image: namdd72/logstash
+    restart: always
+    build: .
+    depends_on:
+        - postgresql
+        - elasticsearch
+    volumes:
+        - ./logstash-pipeline/:/usr/share/logstash/pipeline/
   kibana:
     image: docker.elastic.co/kibana/kibana:6.3.0
     restart: always
     ports:
         - 5601:5601
     depends_on:
-        - elasticsearch
-
-  logstash:
-    image: logstash
-    restart: always
-    build: ./logstash
-    depends_on:
-        - postgresql
         - elasticsearch
 
 volumes:
